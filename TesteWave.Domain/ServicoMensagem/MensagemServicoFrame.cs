@@ -11,13 +11,32 @@ namespace TesteWave.Domain.ServicoMensagem
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal class MensagemServicoFrame
     {
+        private string dados = string.Empty;
+
         public byte Header { get; } = 0x7D;
 
-        public byte ComprimentoMensagem { get; set; }
+        public byte ComprimentoMensagem
+        {
+            get
+            {
+                return (byte)Encoding.ASCII.GetByteCount(DadosString);
+            }
+        }
 
         public EnumFuncoes CodigoFuncao { get; set; }
 
         public byte[] Dados { get; set; }
+
+        public string DadosString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.dados))
+                    dados = Encoding.ASCII.GetString(this.Dados);
+
+                return this.dados;
+            }
+        }
 
         public string CheckSum
         {

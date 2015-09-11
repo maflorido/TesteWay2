@@ -14,9 +14,11 @@ namespace TesteWave.Domain
         {
             MensagemServicoFrame frame = new MensagemServicoFrame();
 
-            frame.ComprimentoMensagem = 00;
+            
             frame.CodigoFuncao = EnumFuncoes.LerNumeroSerie;
             frame.Dados = null;
+            var teste = frame.CheckSum;
+            var aa = frame.ComprimentoMensagem;
         }
     }
 }
