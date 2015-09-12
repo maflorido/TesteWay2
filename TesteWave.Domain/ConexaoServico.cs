@@ -12,6 +12,7 @@ namespace TesteWave.Domain
     {
         private static string IpAddress = ConfigurationSettings.AppSettings["ip"];
         private static ServicoFuncoes servicoFuncoesNumeroSerie;
+        private static int porta = 4000;
 
         public ConexaoServico(ServicoFuncoes servicoFuncoes)
         {
@@ -20,18 +21,28 @@ namespace TesteWave.Domain
 
         public static void Conectar()
         {
-            ConexaoServico.servicoFuncoesNumeroSerie = new FuncaoNumeroSerie();
-            //try
-            //{
-            //    TcpClient client = new TcpClient();
-            //    client.Connect(IpAddress, 4000);
-            //}
-            //catch(Exception ex)
-            //{
-            //    throw new Exception("Erro ao conectar no servidor." + ex.Message);
-            //}
+            ConexaoServico.servicoFuncoesNumeroSerie = new FuncaoNumeroSerie();         
+            try
+            {
+                TcpClient client = new TcpClient();
+                client.Connect(IpAddress, porta);
+            }
+            catch (Exception ex)
+            {
+                if (porta < 4005)
+                {
+                    porta++;
+                    Conectar();
+                }                    
+                else
+                {
+                    porta = 4000;
+                    throw new Exception("Erro ao conectar no servidor." + ex.Message);
+                }
+            }
 
             servicoFuncoesNumeroSerie.Executar();
         }
+
     }
 }
